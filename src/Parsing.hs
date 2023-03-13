@@ -87,7 +87,7 @@ natExp = Nat <$> fromInteger <$> (natural miniHs)
 
 
 parenExp :: Parser ComplexExp
-parenExp = undefined
+parenExp = (parens miniHs) expr
 
 basicExp :: Parser ComplexExp
 basicExp = letrecExp <|> letExp <|> lambdaExp <|> varExp <|> listExp <|> natExp <|> parenExp 
@@ -96,7 +96,9 @@ basicExp = letrecExp <|> letExp <|> lambdaExp <|> varExp <|> listExp <|> natExp 
 
 
 expr :: Parser ComplexExp
-expr = varExp
+expr = do
+    es <- some (basicExp)
+    return $ foldl1 CApp es
 -- >>> testParse expr "\\x -> [x,y,z]"
 -- CLam (Var {getVar = "x"}) (List [CX (Var {getVar = "x"}),CX (Var {getVar = "y"}),CX (Var {getVar = "z"})])
 
