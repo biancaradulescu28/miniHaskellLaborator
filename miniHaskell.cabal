@@ -27,6 +27,7 @@ library
   exposed-modules:
       Eval
       Exp
+      Lib
       Parsing
       Printing
       REPLCommand
